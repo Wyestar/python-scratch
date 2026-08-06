@@ -78,9 +78,9 @@ def checkGameEnded(board: list):
     return False
 
 
-# check play is valid
-def checkPlayIsValid(board: list, input: str):
-    play = int(input)
+# check play is valid and update board if so
+def checkPlayIsValidAndUpdateBoard(board: list, input: str, currentPlayer: str, currentSymbol: str):
+    # play = int(input)
 
     boardPos = boardPositions[input]
     boardPosRow = boardPos['row']
@@ -93,12 +93,18 @@ def checkPlayIsValid(board: list, input: str):
     # "value": "",
     # "numpadNotation": numpadNotation}
 
-    if boardPosFinal.
+    if boardPosFinal["playFrom"] or boardPosFinal["value"]:
+        print("pos already played")
+        return False
+    else:
+        boardPosFinal["playFrom"] = currentPlayer
+        boardPosFinal["value"] = currentSymbol
+        return True
 
 
 
 # retain order of positions played?
-def startPlayerTurn(board, whosTurnIsIt):
+def startPlayerTurn(board: list, whosTurnIsIt: str, currentSymbol: str):
     currentPlayer = p1
 
     if whosTurnIsIt == p2:
@@ -107,7 +113,7 @@ def startPlayerTurn(board, whosTurnIsIt):
     # check player input is valid, not already chosen position
     playerInputIsNotValid = True
     while playerInputIsNotValid:
-        inputPosition = input("Prompt >")
+        inputPosition = input("Input Prompt >")
         # regex to ensure only 1-9
         pattern = r"^[1-9]$"
         inputMatch = re.match(pattern, inputPosition)
@@ -116,7 +122,7 @@ def startPlayerTurn(board, whosTurnIsIt):
         if inputMatch:
             validatedInput = inputMatch.group(0)
 
-        isPlayValid = checkPlayIsValid(board, validatedInput)
+        isPlayValid = checkPlayIsValidAndUpdateBoard(board, validatedInput, currentPlayer, currentSymbol)
 
         # TODO; add command menu input support
         if inputPosition == "help":
@@ -127,9 +133,15 @@ def startPlayerTurn(board, whosTurnIsIt):
 
         if isPlayValid:
             print("play is valid and update board and move turn to next player")
+            break;
         else:
             playerInputIsNotValid = False
     # update board with playFrom and value
+
+    if currentPlayer is p1:
+        return p2
+    else:
+        return p1
 
 
 def startGameplay():
@@ -137,22 +149,31 @@ def startGameplay():
 
     p1 = "p1"
     p2 = "p2"
+    ex = "x"
+    circle = "o"
+    # TODO; allow players to choose their symbol
     ended = "ended"
 
     whosTurnIsIt = p1
+    currentSymbol = ex
     gameIsOngoing = True
 
     while gameIsOngoing:
-        nextPlayer = startPlayerTurn(board, whosTurnIsIt)
+        nextPlayer = startPlayerTurn(board, whosTurnIsIt, currentSymbol)
+        # nextPlayer needs to be a string 'p1' or 'p2'
 
+        print("after player turn")
+        print(board)
         isGameEnded = checkGameEnded(board)
         if isGameEnded:
             gameIsOngoing = False
 
         if nextPlayer == p2:
             whosTurnIsIt = p2
+            currentSymbol = circle
         elif nextPlayer == p1:
             whosTurnIsIt = p1
+            currentSymbol = ex
 
 
 startGameplay()

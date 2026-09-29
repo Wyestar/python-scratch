@@ -2,16 +2,16 @@ from constants.cell import Cell, CellType
 
 
 def mancalaBoardGenerator():
-    lCell = Cell("l", 0, CellType.FIELD, None, None)
-    kCell = Cell("k", 0, CellType.FIELD, None, lCell)
+    lCell = Cell("l", 3, CellType.FIELD, None, None)
+    kCell = Cell("k", 2, CellType.FIELD, None, lCell)
     jCell = Cell("j", 0, CellType.FIELD, None, kCell)
     iCell = Cell("i", 1, CellType.FIELD, None, jCell)
     hCell = Cell("h", 1, CellType.FIELD, None, iCell)
     gCell = Cell("g", 2, CellType.FIELD, None, hCell)
 
-    p2Store = Cell("p1store", 0, CellType.STORE, None, gCell)
+    p1Store = Cell("p1store", 1, CellType.STORE, None, gCell)
 
-    fCell = Cell("f", 0, CellType.FIELD, gCell, p2Store)
+    fCell = Cell("f", 1, CellType.FIELD, gCell, p1Store)
     eCell = Cell("e", 1, CellType.FIELD, hCell, fCell)
     dCell = Cell("d", 0, CellType.FIELD, iCell, eCell)
     cCell = Cell("c", 1, CellType.FIELD, jCell, dCell)
